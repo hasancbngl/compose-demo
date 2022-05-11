@@ -35,34 +35,38 @@ fun MainScreen() {
         modifier = Modifier.fillMaxSize()
     ) {
         Row(
-            modifier = Modifier.background(Color.Gray)
+            modifier = Modifier.background(Color.Gray),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            val modifierTop = Modifier
+        /*    val modifierTop = Modifier
                 .width(60.dp)
-                .height(600.dp)
+                .height(650.dp)
                 .padding(8.dp)
                 .align(Alignment.Top)
-            val modifierBottom = Modifier
+            val  = Modifier
                 .width(60.dp)
-                .height(600.dp)
+                .height(650.dp)
                 .padding(8.dp)
-                .align(Alignment.Bottom)
+                .align(Alignment.Bottom) */
 
-            HorizantalBar(color = Color.Yellow, modifierTop)
-            HorizantalBar(color = Color.Green, modifierBottom)
-            HorizantalBar(color = Color.Black, modifierTop)
-            HorizantalBar(color = Color.Blue, modifierBottom)
-            HorizantalBar(color = Color.Red, modifierTop)
-            HorizantalBar(color = Color.Cyan, modifierBottom)
+            HorizantalBar(color = Color.Yellow)
+            HorizantalBar(color = Color.Green)
+            HorizantalBar(color = Color.Black)
+            HorizantalBar(color = Color.Blue)
+            HorizantalBar(color = Color.Red)
+            HorizantalBar(color = Color.Cyan)
         }
     }
 }
 
 @Composable
-fun HorizantalBar(color: Color, modifier: Modifier) {
+fun HorizantalBar(color: Color) {
     Surface(
         color = color,
-        modifier = modifier
+        modifier = Modifier
+            .width(40.dp)
+            .height(300.dp)
     ) {
         Text(
             text = "Test", color = Color.White,
