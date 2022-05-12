@@ -34,29 +34,79 @@ fun MainScreen() {
         color = Color.Blue,
         modifier = Modifier.fillMaxSize()
     ) {
-        Row(
-            modifier = Modifier.background(Color.Gray),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-        /*    val modifierTop = Modifier
-                .width(60.dp)
-                .height(650.dp)
-                .padding(8.dp)
-                .align(Alignment.Top)
-            val  = Modifier
-                .width(60.dp)
-                .height(650.dp)
-                .padding(8.dp)
-                .align(Alignment.Bottom) */
+        /*  Row(
+              modifier = Modifier.background(Color.Gray),
+              horizontalArrangement = Arrangement.SpaceEvenly,
+              verticalAlignment = Alignment.CenterVertically
+          ) {
+          /*    val modifierTop = Modifier
+                  .width(60.dp)
+                  .height(650.dp)
+                  .padding(8.dp)
+                  .align(Alignment.Top)
+              val  = Modifier
+                  .width(60.dp)
+                  .height(650.dp)
+                  .padding(8.dp)
+                  .align(Alignment.Bottom) */
 
-            HorizantalBar(color = Color.Yellow)
-            HorizantalBar(color = Color.Green)
-            HorizantalBar(color = Color.Black)
-            HorizantalBar(color = Color.Blue)
-            HorizantalBar(color = Color.Red)
-            HorizantalBar(color = Color.Cyan)
+              HorizantalBar(color = Color.Yellow)
+              HorizantalBar(color = Color.Green)
+              HorizantalBar(color = Color.Black)
+              HorizantalBar(color = Color.Blue)
+              HorizantalBar(color = Color.Red)
+              HorizantalBar(color = Color.Cyan)
+          } */
+        Column(
+            modifier = Modifier
+                .background(Color.Gray)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Blue),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                ColoredSquare(color = Color.Yellow)
+                ColoredSquare(color = Color.Green)
+                ColoredSquare(color = Color.Black)
+            }
+            ColoredSquare(color = Color.Blue)
+            ColoredSquare(color = Color.Red)
+            ColoredSquare(color = Color.Cyan)
         }
+    }
+}
+
+@Composable
+fun ColoredSquare(color: Color) {
+    Surface(
+        color = color,
+        modifier = Modifier
+            .width(100.dp)
+            .height(100.dp)
+    ) {
+
+    }
+}
+
+@Composable
+fun VerticalBar(color: Color) {
+    Surface(
+        color = color,
+        modifier = Modifier
+            .width(200.dp)
+            .height(80.dp)
+    ) {
+        Text(
+            text = "Test", color = Color.White,
+            modifier = Modifier.wrapContentSize(),
+            fontSize = 18.sp
+        )
     }
 }
 
