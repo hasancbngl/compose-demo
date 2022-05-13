@@ -48,7 +48,7 @@ fun MainScreen() {
 @Composable
 fun GreetingList() {
     val greetingsListState = remember {
-        mutableStateListOf("John", "aasaas")
+        mutableStateListOf("John")
     }
 
     greetingsListState.forEach {
@@ -57,7 +57,10 @@ fun GreetingList() {
     Button(
         modifier = Modifier
             .padding(0.dp, 20.dp, 0.dp, 0.dp),
-        onClick = { greetingsListState.add("heey") },
+        onClick = {
+            greetingsListState.add("android")
+            greetingsListState.add("android")
+        },
         shape = CircleShape,
         border = BorderStroke(3.dp, Color.Gray),
         colors = ButtonDefaults.buttonColors(
