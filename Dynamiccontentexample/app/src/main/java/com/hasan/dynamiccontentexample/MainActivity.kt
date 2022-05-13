@@ -1,21 +1,14 @@
 package com.hasan.dynamiccontentexample
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,54 +20,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
+    var viewModel = MainViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            MainScreen(viewModel)
         }
     }
 }
 
 @Composable
-fun MainScreen() {
-    val greetingsListState = remember {
-        mutableStateListOf("John", "Elisa", "Ed", "Lena")
-    }
-    val newNameState = remember { mutableStateOf("") }
-
+fun MainScreen(viewModel: MainViewModel){
+    val newName = viewModel.textFieldState.observeAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(0.dp, 24.dp, 0.dp, 0.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        GreetingList(greetingsListState,
-            {
-                newNameState.value.let {
-                    if (it.isNotEmpty()) {
-                        greetingsListState.add(it)
-                        newNameState.value = ""
-                    }
-                }
-            }, newNameState.value, { newNameState.value = it })
-
-        RemoveItemFromList {
-            if (greetingsListState.size > 0) greetingsListState.removeAt(0)
-        }
+        GreetingMsg(newName.value ?: "" ) { viewModel.onTextChanged(it) }
     }
 }
 
 @Composable
-fun GreetingList(
-    names: List<String>,
-    addName: () -> Unit,
+fun GreetingMsg(
     textFieldValue: String,
     textFieldUpdate: (newName: String) -> Unit
 ) {
-    names.forEach {
-        Greeting(name = it)
-    }
     TextField(
         value = textFieldValue,
         onValueChange = textFieldUpdate,
@@ -85,7 +58,7 @@ fun GreetingList(
     Button(
         modifier = Modifier
             .padding(0.dp, 30.dp, 0.dp, 0.dp),
-        onClick = addName,
+        onClick = { },
         shape = CircleShape,
         border = BorderStroke(3.dp, Color.Gray),
         colors = ButtonDefaults.buttonColors(
@@ -93,7 +66,7 @@ fun GreetingList(
         )
     ) {
         Text(
-            text = "Add new Name",
+            text = textFieldValue,
             fontSize = 18.sp
         )
     }
@@ -128,5 +101,5 @@ fun Greeting(name: String) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    MainScreen()
+   // MainScreen()
 }
