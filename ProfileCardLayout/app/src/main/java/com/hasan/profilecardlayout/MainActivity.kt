@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -52,15 +54,16 @@ fun MainScreen() {
                 .fillMaxSize(),
             color = MaterialTheme.colorScheme.primary,
         ) {
-            Column(
+            LazyColumn(
                 modifier = Modifier.padding(
                     top = 76.dp,
+                    bottom = 8.dp
                 ),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                userProfileList.forEach {
-                    ProfileCard(it)
+                items(userProfileList) {
+                    ProfileCard(userProfile = it)
                 }
             }
         }

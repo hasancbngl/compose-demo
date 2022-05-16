@@ -9,4 +9,12 @@ val userProfileList = mutableListOf(
     UserProfile(name = "Anna Joans", status = false, R.drawable.profile_picture2),
     UserProfile(name = "Hasan", status = false, R.drawable.profile_picture),
     UserProfile(name = "Eli", status = true, R.drawable.profile_picture2),
+    UserProfile(name = "John Doe", status = true, R.drawable.profile_picture),
+    UserProfile(name = "Anna Joans", status = false, R.drawable.profile_picture2),
+    UserProfile(name = "Hasan", status = false, R.drawable.profile_picture),
+    UserProfile(name = "Eli", status = true, R.drawable.profile_picture2),
+    UserProfile(name = "John Doe", status = true, R.drawable.profile_picture),
+    UserProfile(name = "Anna Joans", status = false, R.drawable.profile_picture2),
+    UserProfile(name = "Hasan", status = false, R.drawable.profile_picture),
+    UserProfile(name = "Eli", status = true, R.drawable.profile_picture2),
 )
