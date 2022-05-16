@@ -69,6 +69,7 @@ fun ProfileCardLayoutTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
+        shapes = shapes
     )
 }
