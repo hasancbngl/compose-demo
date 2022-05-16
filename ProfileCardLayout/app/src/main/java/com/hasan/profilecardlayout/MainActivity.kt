@@ -116,7 +116,7 @@ fun ProfileCard(userProfile: UserProfile) {
             horizontalArrangement = Arrangement.Start
         ) {
             with(userProfile) {
-                ProfilePicture(drawableId, status)
+                ProfilePicture(imageUrl, status)
                 ProfileContent(name, status)
             }
         }
@@ -125,7 +125,7 @@ fun ProfileCard(userProfile: UserProfile) {
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProfilePicture(id: Int, online: Boolean) {
+fun ProfilePicture(url: String, online: Boolean) {
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
         border = BorderStroke(
@@ -136,14 +136,11 @@ fun ProfilePicture(id: Int, online: Boolean) {
         shape = CircleShape,
         modifier = Modifier.padding(16.dp)
     ) {
-        SubcomposeAsyncImage(
-            model = id,
+        AsyncImage(
+            model = url,
             contentDescription = "image",
             modifier = Modifier.size(72.dp),
             contentScale = ContentScale.Crop,
-            loading = {
-                CircularProgressIndicator()
-            },
         )
     }
 }
