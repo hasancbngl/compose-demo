@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -19,14 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
-import com.hasan.profilecardlayout.ui.theme.LightGreen200
+import com.hasan.profilecardlayout.ui.UserProfile
 import com.hasan.profilecardlayout.ui.theme.ProfileCardLayoutTheme
+import com.hasan.profilecardlayout.ui.theme.black
 import com.hasan.profilecardlayout.ui.theme.lightGreen
+import com.hasan.profilecardlayout.ui.userProfileList
 
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
@@ -34,7 +33,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         //convert hex code color and override default color
-        LightGreen200 = Color("#000000".toColorInt())
+        //  LightGreen200 = Color("#000000".toColorInt())
         setContent {
             ProfileCardLayoutTheme {
                 MainScreen()
@@ -55,15 +54,14 @@ fun MainScreen() {
         ) {
             Column(
                 modifier = Modifier.padding(
-                    top = 80.dp,
+                    top = 76.dp,
                 ),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                ProfileCard()
-                ProfileCard()
-                ProfileCard()
-                ProfileCard()
+                userProfileList.forEach {
+                    ProfileCard(it)
+                }
             }
         }
     }
@@ -90,14 +88,14 @@ fun AppBar() {
             )
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = Color.Gray
+            containerColor = Color.Red
         )
     )
 }
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProfileCard() {
+fun ProfileCard(userProfile: UserProfile) {
     Card(
         modifier = Modifier
             .padding(start = 16.dp, top = 8.dp, bottom = 4.dp, end = 16.dp)
@@ -112,24 +110,29 @@ fun ProfileCard() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            ProfilePicture()
-            ProfileContent()
+            with(userProfile) {
+                ProfilePicture(drawableId, status)
+                ProfileContent(name, status)
+            }
         }
     }
 }
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProfilePicture() {
+fun ProfilePicture(id: Int, online: Boolean) {
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.lightGreen),
+        border = BorderStroke(
+            2.dp,
+            if (online) MaterialTheme.colorScheme.lightGreen
+            else MaterialTheme.colorScheme.black
+        ),
         shape = CircleShape,
-        modifier = Modifier.padding(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black)
+        modifier = Modifier.padding(16.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.profile_picture),
+            painter = painterResource(id = id),
             contentDescription = "image",
             modifier = Modifier.size(72.dp),
             contentScale = ContentScale.Crop
@@ -138,7 +141,7 @@ fun ProfilePicture() {
 }
 
 @Composable
-fun ProfileContent() {
+fun ProfileContent(name: String, status: Boolean) {
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -146,12 +149,13 @@ fun ProfileContent() {
         horizontalAlignment = Alignment.Start
     ) {
         Text(
-            text = "John Doe",
+            modifier = Modifier.alpha(if (status) 1f else 0.4f),
+            text = name,
             style = MaterialTheme.typography.labelMedium
         )
         Text(
             modifier = Modifier.alpha(0.25f),
-            text = "Active now",
+            text = if (status) "Active now" else "Offline",
             style = TextStyle(
                 color = Color.Black,
                 fontSize = 16.sp

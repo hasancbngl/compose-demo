@@ -13,9 +13,14 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 val LightGray = Color(0xbbbbbbbb)
 var LightGreen200 = Color(0xDD66F013)
+var black00 = Color(0xFF000000)
 
 
 //write extension fun for colors of mateirls theme
 val ColorScheme.lightGreen: Color
     @Composable
     get() = LightGreen200
+
+val ColorScheme.black: Color
+    @Composable
+    get() = black00
