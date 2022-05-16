@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -30,6 +30,7 @@ import com.hasan.profilecardlayout.ui.theme.ProfileCardLayoutTheme
 import com.hasan.profilecardlayout.ui.theme.black
 import com.hasan.profilecardlayout.ui.theme.lightGreen
 import com.hasan.profilecardlayout.ui.userProfileList
+import org.intellij.lang.annotations.JdkConstants
 
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
         //  LightGreen200 = Color("#000000".toColorInt())
         setContent {
             ProfileCardLayoutTheme {
-                MainScreen()
+                UsersScreen()
             }
         }
     }
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
 @ExperimentalMaterial3Api
 @Composable
-fun MainScreen() {
+fun UsersScreen() {
     //scaffold composable helps to add app bar
     Scaffold(topBar = { AppBar() }) {
         Surface(
@@ -116,8 +117,8 @@ fun ProfileCard(userProfile: UserProfile) {
             horizontalArrangement = Arrangement.Start
         ) {
             with(userProfile) {
-                ProfilePicture(imageUrl, status)
-                ProfileContent(name, status)
+                ProfilePicture(imageUrl, status, 72.dp)
+                ProfileContent(name, status, Alignment.Start)
             }
         }
     }
@@ -125,7 +126,7 @@ fun ProfileCard(userProfile: UserProfile) {
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProfilePicture(url: String, online: Boolean) {
+fun ProfilePicture(url: String, online: Boolean, size: Dp) {
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
         border = BorderStroke(
@@ -139,19 +140,18 @@ fun ProfilePicture(url: String, online: Boolean) {
         AsyncImage(
             model = url,
             contentDescription = "image",
-            modifier = Modifier.size(72.dp),
+            modifier = Modifier.size(size),
             contentScale = ContentScale.Crop,
         )
     }
 }
 
 @Composable
-fun ProfileContent(name: String, status: Boolean) {
+fun ProfileContent(name: String, status: Boolean, alignment: Alignment.Horizontal) {
     Column(
         modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.Start
+            .padding(8.dp),
+        horizontalAlignment = alignment
     ) {
         Text(
             modifier = Modifier.alpha(if (status) 1f else 0.4f),
@@ -170,10 +170,45 @@ fun ProfileContent(name: String, status: Boolean) {
 }
 
 @ExperimentalMaterial3Api
+@Composable
+fun ProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
+    //scaffold composable helps to add app bar
+    Scaffold(topBar = { AppBar() }) {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.primary,
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 76.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                with(userProfile) {
+                    ProfilePicture(imageUrl, status, 240.dp)
+                    ProfileContent(name, status, Alignment.CenterHorizontally)
+                }
+            }
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun ShowDetailPreview() {
     ProfileCardLayoutTheme {
-        MainScreen()
+        ProfileDetailScreen()
+    }
+}
+
+@ExperimentalMaterial3Api
+@Preview(showBackground = true)
+@Composable
+fun UsersMainScreenPreview() {
+    ProfileCardLayoutTheme {
+        UsersScreen()
     }
 }

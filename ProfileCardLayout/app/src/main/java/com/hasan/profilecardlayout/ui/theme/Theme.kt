@@ -18,7 +18,7 @@ import androidx.core.view.ViewCompat
 
 //if the android device on dark theme
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
+    primary = LightGray,
     secondary = PurpleGrey80,
     tertiary = Pink80,
     surface = Color.DarkGray
