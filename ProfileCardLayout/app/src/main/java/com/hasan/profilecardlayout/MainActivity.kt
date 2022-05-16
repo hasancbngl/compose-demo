@@ -23,6 +23,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.hasan.profilecardlayout.ui.UserProfile
 import com.hasan.profilecardlayout.ui.theme.ProfileCardLayoutTheme
 import com.hasan.profilecardlayout.ui.theme.black
@@ -134,11 +136,14 @@ fun ProfilePicture(id: Int, online: Boolean) {
         shape = CircleShape,
         modifier = Modifier.padding(16.dp)
     ) {
-        Image(
-            painter = painterResource(id = id),
+        SubcomposeAsyncImage(
+            model = id,
             contentDescription = "image",
             modifier = Modifier.size(72.dp),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            loading = {
+                CircularProgressIndicator()
+            },
         )
     }
 }
