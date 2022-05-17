@@ -51,15 +51,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun UsersScreen() {
     //scaffold composable helps to add app bar
-    Scaffold(topBar = { AppBar() }) {
+    Scaffold(topBar = { AppBar() }) { paddingValues ->
         Surface(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(paddingValues),
             color = MaterialTheme.colorScheme.primary,
         ) {
             LazyColumn(
                 modifier = Modifier.padding(
-                    top = 76.dp,
+                    top = 0.dp,
                     bottom = 8.dp
                 ),
                 verticalArrangement = Arrangement.Top,
@@ -67,6 +68,32 @@ fun UsersScreen() {
             ) {
                 items(userProfileList) {
                     ProfileCard(userProfile = it)
+                }
+            }
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+fun ProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
+    //scaffold composable helps to add app bar
+    Scaffold(topBar = { AppBar() }) { paddingValues ->
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            color = MaterialTheme.colorScheme.primary,
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                with(userProfile) {
+                    ProfilePicture(imageUrl, status, 240.dp)
+                    ProfileContent(name, status, Alignment.CenterHorizontally)
                 }
             }
         }
@@ -166,32 +193,6 @@ fun ProfileContent(name: String, status: Boolean, alignment: Alignment.Horizonta
                 fontSize = 16.sp
             )
         )
-    }
-}
-
-@ExperimentalMaterial3Api
-@Composable
-fun ProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
-    //scaffold composable helps to add app bar
-    Scaffold(topBar = { AppBar() }) {
-        Surface(
-            modifier = Modifier
-                .fillMaxSize(),
-            color = MaterialTheme.colorScheme.primary,
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 76.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-                with(userProfile) {
-                    ProfilePicture(imageUrl, status, 240.dp)
-                    ProfileContent(name, status, Alignment.CenterHorizontally)
-                }
-            }
-        }
     }
 }
 
