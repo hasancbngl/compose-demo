@@ -1,36 +1,44 @@
 package com.hasan.profilecardlayout
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
-import coil.compose.SubcomposeAsyncImage
 import com.hasan.profilecardlayout.ui.UserProfile
 import com.hasan.profilecardlayout.ui.theme.ProfileCardLayoutTheme
 import com.hasan.profilecardlayout.ui.theme.black
 import com.hasan.profilecardlayout.ui.theme.lightGreen
 import com.hasan.profilecardlayout.ui.userProfileList
-import org.intellij.lang.annotations.JdkConstants
 
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
@@ -41,17 +49,43 @@ class MainActivity : ComponentActivity() {
         //  LightGreen200 = Color("#000000".toColorInt())
         setContent {
             ProfileCardLayoutTheme {
-                UsersScreen()
+                UsersApplication()
             }
+        }
+    }
+}
+
+//manage navigation
+@ExperimentalMaterial3Api
+@Composable
+fun UsersApplication(usersList: List<UserProfile> = userProfileList) {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "users_list") {
+        composable("users_list") {
+            UsersScreen(usersList, navController)
+        }
+        composable(
+            "user_details/{userId}",
+            arguments = listOf(navArgument("userId") {
+                type = NavType.IntType
+            })
+        ) {
+            ProfileDetailScreen(it.arguments!!.getInt("userId"), navController)
         }
     }
 }
 
 @ExperimentalMaterial3Api
 @Composable
-fun UsersScreen() {
+fun UsersScreen(usersList: List<UserProfile>, navController: NavHostController?) {
     //scaffold composable helps to add app bar
-    Scaffold(topBar = { AppBar() }) { paddingValues ->
+    Scaffold(topBar = {
+        AppBar(
+            Icons.Default.Home,
+            "Users List",
+            false
+        ) {}
+    }) { paddingValues ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -60,14 +94,16 @@ fun UsersScreen() {
         ) {
             LazyColumn(
                 modifier = Modifier.padding(
-                    top = 0.dp,
+                    top = 8.dp,
                     bottom = 8.dp
                 ),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(userProfileList) {
-                    ProfileCard(userProfile = it)
+                items(usersList) {
+                    ProfileCard(userProfile = it) {
+                        navController?.navigate("user_details/${it.id}")
+                    }
                 }
             }
         }
@@ -76,9 +112,17 @@ fun UsersScreen() {
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
+fun ProfileDetailScreen(userId: Int, navController: NavHostController?) {
     //scaffold composable helps to add app bar
-    Scaffold(topBar = { AppBar() }) { paddingValues ->
+    val userProfile = userProfileList.find { it.id == userId }
+    Scaffold(topBar = {
+        AppBar(
+            iconVector = Icons.Default.ArrowBack,
+            title = "User Details",
+            isClickable = true
+        ) { navController?.navigateUp() }
+
+    }) { paddingValues ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,11 +131,12 @@ fun ProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                with(userProfile) {
+                userProfile?.apply {
                     ProfilePicture(imageUrl, status, 240.dp)
                     ProfileContent(name, status, Alignment.CenterHorizontally)
                 }
@@ -101,22 +146,27 @@ fun ProfileDetailScreen(userProfile: UserProfile = userProfileList[0]) {
 }
 
 @Composable
-fun AppBar() {
+fun AppBar(
+    iconVector: ImageVector, title: String,
+    isClickable: Boolean,
+    onIconClick: () -> Unit
+) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Users",
+                text = title,
                 fontSize = 22.sp,
                 color = Color.White
             )
         },
         navigationIcon = {
             Icon(
-                imageVector = Icons.Default.Home,
+                imageVector = iconVector,
                 contentDescription = "description",
                 modifier = Modifier
                     .size(48.dp)
-                    .padding(16.dp, 0.dp, 0.dp, 0.dp),
+                    .padding(16.dp, 0.dp, 0.dp, 0.dp)
+                    .clickable(enabled = isClickable, onClick = { onIconClick.invoke() }),
                 tint = Color.White
             )
         },
@@ -128,12 +178,13 @@ fun AppBar() {
 
 @ExperimentalMaterial3Api
 @Composable
-fun ProfileCard(userProfile: UserProfile) {
+fun ProfileCard(userProfile: UserProfile, onCardClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(start = 16.dp, top = 8.dp, bottom = 4.dp, end = 16.dp)
             .fillMaxWidth()
-            .wrapContentHeight(align = Alignment.Top),
+            .wrapContentHeight(align = Alignment.Top)
+            .clickable(onClick = onCardClick),
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = MaterialTheme.shapes.medium
@@ -201,7 +252,7 @@ fun ProfileContent(name: String, status: Boolean, alignment: Alignment.Horizonta
 @Composable
 fun ShowDetailPreview() {
     ProfileCardLayoutTheme {
-        ProfileDetailScreen()
+        ProfileDetailScreen(0, null)
     }
 }
 
@@ -210,6 +261,6 @@ fun ShowDetailPreview() {
 @Composable
 fun UsersMainScreenPreview() {
     ProfileCardLayoutTheme {
-        UsersScreen()
+        UsersScreen(userProfileList, null)
     }
 }
