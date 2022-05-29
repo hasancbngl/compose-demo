@@ -2,7 +2,7 @@ package com.hasan.mvvmcompose_mealzapp.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class MealsResponse(val categories: List<MealResponse>)
+data class MealsCategories(val categories: List<MealResponse>)
 
 data class MealResponse(
     @SerializedName("idCategory")
