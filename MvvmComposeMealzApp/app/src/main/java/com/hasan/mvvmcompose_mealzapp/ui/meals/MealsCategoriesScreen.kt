@@ -1,14 +1,21 @@
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +43,8 @@ fun MealsCategoriesScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MealCategory(meal: MealResponse) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(1.5.dp),
@@ -44,7 +53,7 @@ fun MealCategory(meal: MealResponse) {
             .padding(top = 16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
-        Row {
+        Row(modifier = Modifier.animateContentSize()) {
             AsyncImage(
                 model = meal.imageUrl,
                 contentDescription = "image",
@@ -52,13 +61,36 @@ fun MealCategory(meal: MealResponse) {
                 modifier = Modifier
                     .padding(4.dp)
                     .size(88.dp)
+                    .align(Alignment.CenterVertically)
             )
 
-            Column(modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(16.dp)) {
-                Text(text = "Name: ${meal.name}", style = MaterialTheme.typography.titleMedium)
+            Column(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .fillMaxWidth(0.8f)
+                    .padding(16.dp)
+            ) {
+                Text(text = meal.name, style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = meal.description,
+                    style = MaterialTheme.typography.bodySmall,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .alpha(0.5f)
+                        .padding(top = 2.dp),
+                    maxLines = if (isExpanded) 10 else 3
+                )
             }
+            Icon(
+                imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                contentDescription = "icon",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(if (isExpanded) Alignment.Bottom else Alignment.CenterVertically)
+                    .clickable {
+                        isExpanded = !isExpanded
+                    },
+            )
         }
     }
 }
