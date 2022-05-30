@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,7 +28,10 @@ import java.lang.Float.min
 @Composable
 fun MealDetailsScreen(meal: MealResponse?) {
     val scrollState = rememberLazyListState()
-    val offSet = min(1f, 1 - (scrollState.firstVisibleItemScrollOffset / 500f + scrollState.firstVisibleItemIndex))
+    val offSet = min(
+        1f,
+        1 - (scrollState.firstVisibleItemScrollOffset / 500f + scrollState.firstVisibleItemIndex)
+    )
     val size by animateDpAsState(targetValue = max(100.dp, (200.dp * offSet)))
     Surface(color = MaterialTheme.colorScheme.background) {
         Column {
