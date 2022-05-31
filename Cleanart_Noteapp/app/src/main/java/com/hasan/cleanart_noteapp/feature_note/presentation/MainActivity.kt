@@ -1,4 +1,4 @@
-package com.hasan.cleanart_noteapp
+package com.hasan.cleanart_noteapp.feature_note.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
