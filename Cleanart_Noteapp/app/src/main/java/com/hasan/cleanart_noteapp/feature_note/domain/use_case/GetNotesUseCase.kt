@@ -1,6 +1,5 @@
 package com.hasan.cleanart_noteapp.feature_note.domain.use_case
 
-import androidx.compose.ui.text.toLowerCase
 import com.hasan.cleanart_noteapp.feature_note.domain.model.Note
 import com.hasan.cleanart_noteapp.feature_note.domain.repository.NoteRepository
 import com.hasan.cleanart_noteapp.feature_note.domain.util.NoteOrder
@@ -12,7 +11,6 @@ class GetNotesUseCase(
     private val repository: NoteRepository
 ) {
     //use case should have only one function public which be called from outside
-
     operator fun invoke(
         order: NoteOrder = NoteOrder.Date(OrderType.Descending)
     ): Flow<List<Note>> {
