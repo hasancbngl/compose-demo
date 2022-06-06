@@ -1,6 +1,10 @@
 package com.hasan.cleanart_noteapp.feature_note.presentation.notes
 
+import androidx.compose.animation.*
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Sort
@@ -10,8 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.hasan.cleanart_noteapp.feature_note.presentation.notes.components.NoteItem
+import com.hasan.cleanart_noteapp.feature_note.presentation.notes.components.OrderSection
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -23,20 +30,12 @@ fun NotesScreen(
     val state = viewModel.state.value
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-/*
-    scope.launch {
-        snackbarHostState.showSnackbar("deleted", "undo")
-    }
-    if(result == SnackbarResult.ActionPerformed) {
-        viewModel.onEvent(NotesEvent.RestoreNote)
-    }
-*/
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    //  navController.navigate(Screen.AddEditNoteScreen.route)
+                    //navController.navigate(Screen.AddEditNoteScreen.route)
                 },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
@@ -68,6 +67,44 @@ fun NotesScreen(
                         imageVector = Icons.Default.Sort,
                         contentDescription = "Sort"
                     )
+                }
+            }
+            AnimatedVisibility(
+                visible = state.isOrderSectionVisible,
+                enter = fadeIn() + slideInVertically(),
+                exit = fadeOut() + slideOutVertically()
+            ) {
+                OrderSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    noteOrder = state.noteOrder,
+                    onOrderChange = {
+                        viewModel.onEvent(NotesEvent.Order(it))
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(state.notes) { note ->
+                    NoteItem(
+                        note = note,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+
+                            },
+                        onDeleteClick = {
+                            viewModel.onEvent(NotesEvent.DeleteNote(note))
+                            scope.launch {
+                                val result = snackbarHostState.showSnackbar("deleted", "undo")
+                                if (result == SnackbarResult.ActionPerformed) {
+                                    viewModel.onEvent(NotesEvent.RestoreNote)
+                                }
+                            }
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
