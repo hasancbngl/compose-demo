@@ -2,6 +2,7 @@ package com.hasan.cleanart_noteapp.feature_note.presentation.add_edit_note.compo
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +11,7 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun TransparentHintTextField(
@@ -23,7 +25,7 @@ fun TransparentHintTextField(
     onFocusChange: (FocusState) -> Unit
 ) {
     Box(
-        modifier = modifier
+        modifier = modifier.padding(start = 16.dp)
     ) {
         BasicTextField(
             value = text,

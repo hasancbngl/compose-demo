@@ -76,6 +76,7 @@ fun AddEditNoteScreen(
                 .fillMaxSize()
                 .background(noteBackgroundAnimatable.value)
                 .padding(paddingValues)
+                .padding(16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -87,7 +88,7 @@ fun AddEditNoteScreen(
                     val colorInt = it.toArgb()
                     Box(
                         modifier = Modifier
-                            .size(50.dp)
+                            .size(40.dp)
                             .shadow(15.dp, CircleShape)
                             .clip(CircleShape)
                             .background(it)

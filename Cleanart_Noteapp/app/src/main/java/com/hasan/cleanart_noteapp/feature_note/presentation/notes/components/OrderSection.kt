@@ -1,8 +1,10 @@
 package com.hasan.cleanart_noteapp.feature_note.presentation.notes.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hasan.cleanart_noteapp.feature_note.domain.util.NoteOrder
@@ -25,26 +27,23 @@ fun OrderSection(
                 text = "Title",
                 selected = noteOrder is NoteOrder.Title,
                 onSelect = { onOrderChange(NoteOrder.Title(noteOrder.orderType)) })
-            Spacer(modifier = modifier.width(8.dp))
             DefaultRadioButton(
                 text = "Date",
                 selected = noteOrder is NoteOrder.Date,
                 onSelect = { onOrderChange(NoteOrder.Date(noteOrder.orderType)) })
-            Spacer(modifier = modifier.width(8.dp))
             DefaultRadioButton(
                 text = "Color",
                 selected = noteOrder is NoteOrder.Color,
                 onSelect = { onOrderChange(NoteOrder.Color(noteOrder.orderType)) })
         }
-        Spacer(modifier = modifier.height(16.dp))
         Row(
             modifier = Modifier.fillMaxWidth()
+                .padding(top = 8.dp)
         ) {
             DefaultRadioButton(
                 text = "Ascending",
                 selected = noteOrder.orderType is OrderType.Ascending,
                 onSelect = { onOrderChange(noteOrder.copy(OrderType.Ascending)) })
-            Spacer(modifier = modifier.width(8.dp))
             DefaultRadioButton(
                 text = "Descending",
                 selected = noteOrder.orderType is OrderType.Descending,
