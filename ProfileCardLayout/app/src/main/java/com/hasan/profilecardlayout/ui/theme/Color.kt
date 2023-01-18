@@ -2,6 +2,7 @@ package com.hasan.profilecardlayout.ui.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -23,4 +24,5 @@ val ColorScheme.lightGreen: Color
 
 val ColorScheme.black: Color
     @Composable
+    @ReadOnlyComposable
     get() = black00

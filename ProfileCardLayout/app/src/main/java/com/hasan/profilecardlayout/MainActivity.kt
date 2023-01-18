@@ -1,7 +1,6 @@
 package com.hasan.profilecardlayout
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -18,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -71,6 +69,7 @@ fun UsersApplication(usersList: List<UserProfile> = userProfileList) {
             })
         ) {
             ProfileDetailScreen(it.arguments!!.getInt("userId"), navController)
+
         }
     }
 }
