@@ -27,7 +27,6 @@ import com.hasan.cleanart_noteapp.feature_note.presentation.add_edit_note.compon
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNoteScreen(
     navController: NavController,

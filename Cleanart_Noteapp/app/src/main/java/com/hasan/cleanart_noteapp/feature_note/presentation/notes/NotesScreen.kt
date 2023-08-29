@@ -22,7 +22,6 @@ import com.hasan.cleanart_noteapp.feature_note.presentation.notes.components.Ord
 import com.hasan.cleanart_noteapp.feature_note.presentation.util.Screen
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(
     navController: NavController,
